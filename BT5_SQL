@@ -1,1 +1,10 @@
+/* Query a list of CITY names from STATION for cities that have an even ID number. 
+---Print the results in any order, but exclude duplicates from the answer*/ 
 
+--- Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
+
+
+
+--- Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's 0 key was broken until after completing the calculation. 
+---She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+---Write a query calculating the amount of error (i.e.: actual — miscalculated)  average monthly salaries), and round it up to the next integer.
