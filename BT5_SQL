@@ -1,10 +1,67 @@
-/* Query a list of CITY names from STATION for cities that have an even ID number. 
----Print the results in any order, but exclude duplicates from the answer*/ 
+/*1. Query a list of CITY names from STATION for cities that have an even ID number. 
+---Print the results in any order, but exclude duplicates from the answer */ 
+SELECT DISTINCT CITY FROM STATION
+WHERE ID%2 = 0
 
---- Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.
+/*2. Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table.*/
+SELECT COUNT(CITY) - COUNT(DISTINCT CITY) FROM STATION
+
+/*3. Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's 0 key was broken until after completing the calculation. 
+She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+Write a query calculating the amount of error (i.e.: actual — miscalculated)  average monthly salaries), and round it up to the next integer*/
 
 
+/*4. You're trying to find the mean number of items per order on Alibaba, 
+rounded to 1 decimal place using tables which includes information on the count of items in each order (item_count table) 
+and the corresponding number of orders for each item count (order_occurrences table).
+bước 1: phân tích yêu cầu: NGHĨA đề: đơn hàng có 1 iemts - có 500 đơn; đơn hàng có 2 items - 100 đơn,...
+2. output (gốc/phái |sinh): mean = tổng items/số đơn hàng
+3. input
+4. điều kiện lọc theo trường nào (gốc hay phái sinh) */ 
+- how to convert int to decimal in postgresql? 
+SELECT
+ROUND(CAST(sum(item_count * order_occurrences)/sum(order_occurrences) as DECIMAL),1) as mean --- cast() as detimal --- 
+from items_per_order
 
---- Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's 0 key was broken until after completing the calculation. 
----She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
----Write a query calculating the amount of error (i.e.: actual — miscalculated)  average monthly salaries), and round it up to the next integer.
+
+/* 5. Given a table of candidates and their skills, you're tasked with finding the candidates best suited for an open Data Science job. You want to find candidates who are proficient in Python, Tableau, and PostgreSQL.
+* Write a query to list the candidates who possess all of the required skills for the job. Sort the output by candidate ID in ascending order.
+Phân tich yêu cầu
+- 1. output (gốc/phái sinh):candidate_id
+- 2. input - candidate table
+- 3. điểu kiện lọc theo trường nào (gốc hay phái sinh) */
+
+select candidate_id from candidates
+where skill in ('Python', 'Tableau', 'PostgreSQL')
+GROUP BY candidate_id --- gộp theo candidate và mỗi ứng viên có 3 skills
+having count(skill) = 3
+
+/*6. Given a table of Facebook posts, for each user who posted at least twice in 2021, 
+write a query to find the number of days between each user's first post of the year and last post of the year in the year 2021.
+Output the user and number of the days between each user's first and last post. */
+-	- bước 1: phân tích yêu cầu
+-	- 1. output (gốc/phái sinh): user_id, days_between = max(day) - min(day)
+-	- 2. input - group by user_id
+-	- 3. điều kiện lọc theo trường nào (gốc hay phái sinh) - where 2021
+
+select user_id,
+DATE(max(post_date)) - DATE(min(post_date)) as day_between
+from posts
+WHERE post_date>='2021-01-01' AND post_date<'2022-01-01' 
+group by user_id
+HAVING count (post_id)>= 2
+
+/* 7 Your team at JPMorgan Chase is preparing to launch a new credit card, and to gain some insights, you're analyzing how many credit cards were issued each month.
+Write a query that outputs the name of each credit card and the difference in the number of issued cards between the month with the highest issuance cards and the 
+lowest issuance. Arrange the results based on the largest disparity.
+-	- bước 1: phân tích yêu cầu
+-	- 1. output (gốc/phái sinh): name of each credit card as card name (vd) and differcence = 
+-	- 2. input - group by user_id
+-	- 3. điều kiện lọc theo trường nào (gốc hay phái sinh) - where 2021
+select card_name,
+max(issued_amount) - min(issued_amount) as difference
+from monthly_card_issued
+group by card_name 
+order by difference DESC
+
+
